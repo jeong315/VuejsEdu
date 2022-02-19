@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-router/dist/vue-router.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <h1>Vuejs Application</h1>
+
+      <router-link to="/">Home</router-link>
+      <router-link to="/country">country</router-link>
+      <router-link to="/person">person</router-link>
+      <router-link to="/address">address</router-link>
+      <hr />
+      <router-view></router-view>
+    </div>
+    <script>
+      //컴포넌트
+      var AppComponent = Vue.component("AppComponent", {
+        template: `<div>AppComponent 컴포넌트</div>`,
+      });
+      var CountryComponent = Vue.component("CountryComponent", {
+        template: `<div>
+                     CountryComponent 컴포넌트<br>
+                     <router-link to="/country/add">add</router-link>
+                     <button @click="$router.push({name:'countryList'})">list</button>
+
+                     <router-view></router-view>
+                   </div>`,
+      });
+      var CountryAddComponent = Vue.component("CountryAddComponent", {
+        template: `<div>CountryAddComponent 컴포넌트</div>`,
+      });
+      var CountryListComponent = Vue.component("CountryListComponent", {
+        template: `<div>CountryListComponent 컴포넌트</div>`,
+      });
+
+      var PersonComponent = Vue.component("PersonComponent", {
+        template: `<div>
+                    PersonComponent 컴포넌트<br>
+                    <router-link to="/person/list">list</router-link>
+                    <router-view></router-view>
+                   </div>`,
+      });
+      var PersonListComponent = Vue.component("PersonListComponent", {
+        template: `<div>PersonListComponent 컴포넌트</div>`,
+      });
+
+      var AddressComponent = Vue.component("AddressComponent", {
+        template: `<div>AddressComponent 컴포넌트</div>`,
+      });
+
+      const routes = [
+        {
+          name: "home",
+          path: "/",
+          component: AppComponent,
+        },
+        {
+          name: "country",
+          path: "/country",
+          component: CountryComponent,
+          children: [
+            { name: "countryAdd", path: "add", component: CountryAddComponent },
+            {
+              name: "countryList",
+              path: "list",
+              component: CountryListComponent,
+            },
+          ],
+        },
+        {
+          name: "person",
+          path: "/person",
+          component: PersonComponent,
+          children: [
+            {
+              name: "personList",
+              path: "list",
+              component: PersonListComponent,
+            },
+          ],
+        },
+        { name: "address", path: "/address", component: AddressComponent },
+      ];
+      //Router 객체
+      const router = new VueRouter({
+        mode: "history",
+        routes, // short for `routes: routes`
+      });
+
+      //Vue 객체
+      var app = new Vue({
+        el: "#app",
+        router,
+      });
+    </script>
+  </body>
+</html>

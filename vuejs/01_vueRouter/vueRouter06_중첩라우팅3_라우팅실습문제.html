@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-router/dist/vue-router.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <h1>Vue Router Application</h1>
+      <router-link to="/">Home</router-link>
+      <router-link to="/country">Country</router-link>
+      <router-link to="/person">Person</router-link>
+      <router-link to="/address">Address</router-link>
+      <hr />
+      <router-view></router-view>
+    </div>
+
+    <template id="country-template">
+      <div>
+        <div>country 컴포넌트</div>
+        <router-link to="/country/add">Add</router-link>
+        <button @click="toList">list</button>
+        <hr />
+        <router-view></router-view>
+      </div>
+    </template>
+
+    <template id="list-template">
+      <div>
+        <div>country/list 컴포넌트</div>
+        <router-link to="/country/list/detail">detail</router-link>
+        <router-link to="/country/list/edit">edit</router-link>
+        <hr />
+        <router-view></router-view>
+      </div>
+    </template>
+
+    <template id="person-template">
+      <div>
+        <div>person 컴포넌트</div>
+        <router-link to="/person/personList">personList</router-link>
+      </div>
+    </template>
+  </body>
+
+  <script>
+    const Home = Vue.component("home", {
+      template: `<div>home Component</div>`,
+    });
+    const Country = Vue.component("country", {
+      template: `#country-template`,
+      //@click 메소드
+      methods: {
+        toList() {
+          this.$router.push({ name: `list-comp` });
+        },
+      },
+    });
+    const Person = Vue.component("person", {
+      template: `#person-template`,
+    });
+    const Address = Vue.component("address", {
+      template: `<div>address Component</div>`,
+    });
+    const Add = Vue.component("add", {
+      template: `<div>Country Add Component</div>`,
+    });
+    const List = Vue.component("list", {
+      template: `#list-template`,
+      methods: {
+        toDetail() {
+          this.$router.push({ name: `detail-comp` });
+        },
+        toEdit() {
+          this.$router.push({ name: `edit-comp` });
+        },
+      },
+    });
+    const Detail = Vue.component("detail", {
+      template: `<div>Country List Detail Component</div>`,
+    });
+    const Edit = Vue.component("edit", {
+      template: `<div>Country List Edit Component</div>`,
+    });
+    const PersonList = Vue.component("personList", {
+      template: `<div>PersonList Component</div>`,
+    });
+
+    //Router
+    const routes = [
+      { path: "/", component: Home },
+      {
+        path: "/country",
+        component: Country,
+        children: [
+          { name: "add", path: "add", component: Add },
+          {
+            name: "list-comp",
+            path: "list",
+            component: List,
+            children: [
+              { name: "detail-comp", path: "detail", component: Detail },
+              { name: "edit-comp", path: "edit", component: Edit },
+            ],
+          },
+        ],
+      },
+      {
+        path: "/person",
+        component: Person,
+        children: [
+          { name: "personList", path: "personList", component: PersonList },
+        ],
+      },
+      { path: "/address", component: Address },
+    ];
+    const router = new VueRouter({
+      routes, // short for `routes: routes`
+    });
+
+    var app = new Vue({
+      el: "#app",
+      //vue객체에 등록을 해야한다.
+      router,
+    });
+  </script>
+</html>

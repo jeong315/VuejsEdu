@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-router/dist/vue-router.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <h1>Vue Router Application</h1>
+      <router-link to="/">Home</router-link>
+      <router-link to="/login">Login</router-link>
+      <router-link to="/cart">Cart</router-link>
+      <router-link to="/myPage">My Page</router-link>
+      <hr />
+      <router-view></router-view>
+    </div>
+
+    <template id="login-template">
+      <div>
+        <div>login 컴포넌트</div>
+        <br />
+        id: <input v-model="user.id" /><br />
+        pw: <input v-model="user.pw" /><br />
+        <button @click="login">로그인</button>
+      </div>
+    </template>
+
+    <template id="cart-template">
+      <div>
+        <div>cart 컴포넌트</div>
+      </div>
+    </template>
+  </body>
+
+  <script>
+    const Home = Vue.component("home", {
+      template: `<div>home Component</div>`,
+    });
+
+    const Login = Vue.component("login", {
+      data: function () {
+        return {
+          user: {
+            id: "",
+            pw: "",
+          },
+        };
+      },
+      template: `#login-template`,
+      methods: {
+        login() {
+          console.log(this.user.id);
+          //localStorage에 user 저장 ==> cart와 myPage 등 로그인 이후의 요청은 localStorage 에서
+          // "user" 키에 대한 값 여부로 로그인 처리 확인할 예정임
+          localStorage.setItem("user", this.user);
+          alert("로그인 성공");
+          this.$router.push("/");
+        },
+      },
+    });
+
+    const Cart = Vue.component("cart", {
+      template: `#cart-template`,
+    });
+
+    const MyPage = Vue.component("myPage", {
+      template: `<div>myPage Component</div>`,
+    });
+
+    const routes = [
+      { path: "/", component: Home },
+      { path: "/login", component: Login },
+      { path: "/cart", component: Cart },
+      { path: "/myPage", component: MyPage },
+    ];
+    const router = new VueRouter({
+      routes, // short for `routes: routes`
+    });
+
+    //전역 선처리 guard
+    // router.beforeEach((to, from, next) => {
+    //   /* must call `next`:함수 */
+    //   console.log(`beforeEach, to:${to.path}, from:${from.path}`);
+    //   next(); //인터셉터라고 생각하믄 된다
+    //   //next("/foo"); //지정된 곳으로 라우팅
+    //   //next(false); //지정된 to가 아닌 from으로 라우팅
+    // });
+
+    var app = new Vue({
+      el: "#app",
+      //vue객체에 등록을 해야한다.
+      router,
+    });
+  </script>
+</html>
