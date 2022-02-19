@@ -1,2 +1,64 @@
 # VuejsEdu
 Vue.js 심화 교육
+https://nodejs.org/en/ > 추천 설치
+
+1. vue.js
+  홈페이지: https://v2.vuejs.org/v2/guide/
+
+
+2. Vue Router ( unpkg.com은 더 이상 지원 안함)
+    홈페이지: https://v3.router.vuejs.org/guide
+    
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-router/dist/vue-router.js"></script>
+    
+    
+    
+3. axios
+    홈페이지: https://github.com/axios/axios
+ 
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    
+    *json 실습 사이트
+    https://reqres.in/
+    https://jsonplaceholder.typicode.com/
+    http://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=3d430a039fb1bae3fe5f0bc48df64e46&targetDt=20120101
+    
+    *sts 및 postgres sql 프로그램
+    https://drive.google.com/drive/folders/1gbYWWgKq6axNKs4BODZlsmzMs-sVzWAr?usp=sharing
+  
+  
+4. vuex  
+   홈페이지: https://v3.vuex.vuejs.org/kr/ 
+ 
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuex/dist/vuex.js"></script>
+
+-------------------------
+vsc 확장자
+- vetur
+- live server
+- vue2 snippet
+- prettier
+  ==> vsc , preference > settings > 검색:editor format 을 prettier - Code formatter 로
+				  format on save 체크
+
+크롬 확장프로그램 vue.js devtools 다운로드
+
+* 파라미터 전송
+1. path variable ( ==>RESTFul 서비스 방식)
+    : http://localhost:5500/vuestudy/foo/넘겨줄파라미터값
+    : http://localhost:5500/vuestudy/foo/park
+
+    url 경로 ? foo/ 파라미터값 까지.
+
+2. query string
+    : http://localhost:5500/vuestudy/foo?key=value&key2=value2
+    : http://localhost:5500/vuestudy/foo?id=park
+
+    url 경로 ? /foo 까지.
+
+
+
+
