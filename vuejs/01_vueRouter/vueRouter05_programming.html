@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-router/dist/vue-router.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <h1>Vue Router Application</h1>
+      <router-link to="/">Home</router-link>
+      <router-link to="/foo">Foo</router-link>
+      <router-link to="/bar"> Bar</router-link>
+      <hr />
+      <router-view></router-view>
+    </div>
+
+    <template id="bar-template">
+      <div>
+        <div>bar 컴포넌트</div>
+        <button @click="toFoo">Go to foo(path)</button>
+        <button @click="toFoo2">Go to foo2(name)</button>
+        <button @click="toFoo3">Go to foo3(path,query)</button>
+        <button @click="toFoo4">Go to foo4(name,query, params)</button>
+      </div>
+    </template>
+  </body>
+
+  <script>
+    //3개의 페이지 (SPA)
+    //Component 하나하나가 화면단
+
+    const Home = Vue.component("home", {
+      template: `<div>home Component</div>`,
+    });
+
+    const Foo = Vue.component("foo", {
+      template: `<div>foo Component, {{$route.query}}, {{xyz}}</div>`,
+      data: function () {
+        return {
+          xyz: this.$route.params,
+        };
+      },
+    });
+
+    const Bar = Vue.component("bar", {
+      template: `#bar-template`,
+      methods: {
+        toFoo() {
+          //프로그램으로 foo로 요청
+          this.$router.push({ path: "/foo" });
+          //얘는 route 아니고 er
+        },
+        toFoo2() {
+          this.$router.push({ name: "foo-comp" });
+        },
+        toFoo3() {
+          this.$router.push({
+            path: "/foo",
+            query: { age: 20, name: "20홍길동" },
+          });
+        },
+        toFoo4() {
+          this.$router.push({
+            name: "foo-comp",
+            query: { age: 30, name: "30홍길동" },
+            params: { age: 40, name: "40홍길동" },
+          });
+        },
+      },
+    });
+
+    //Router
+    const routes = [
+      { path: "/", component: Home },
+      { name: "foo-comp", path: "/foo", component: Foo },
+      { path: "/bar", component: Bar },
+    ];
+    const router = new VueRouter({
+      routes, // short for `routes: routes`
+    });
+
+    var app = new Vue({
+      el: "#app",
+      //vue객체에 등록을 해야한다.
+      router,
+    });
+  </script>
+</html>

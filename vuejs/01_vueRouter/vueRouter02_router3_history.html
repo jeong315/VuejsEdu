@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-router/dist/vue-router.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <h1>Vue Router Application</h1>
+      <router-link to="/">Home</router-link>
+      <router-link to="/foo">Foo</router-link>
+      <router-link to="/bar"> Bar</router-link>
+      <hr />
+      <router-view></router-view>
+    </div>
+
+    <template id="bar-template">
+      <div>
+        <div>bar 컴포넌트</div>
+      </div>
+    </template>
+  </body>
+
+  <script>
+    //3개의 페이지 (SPA)
+    //Component 하나하나가 화면단
+
+    const Home = Vue.component("home", {
+      template: `<div>home Component</div>`,
+    });
+
+    const Foo = Vue.component("foo", {
+      template: `<div>foo Component</div>`,
+    });
+
+    const Bar = Vue.component("bar", {
+      template: `#bar-template`,
+    });
+
+    //Router
+    const routes = [
+      { path: "/", component: Home },
+      { path: "/foo", component: Foo },
+      { path: "/bar", component: Bar },
+    ];
+    const router = new VueRouter({
+      mode: "history", //#해쉬태그가 아니라 일반적인 /로 붙음
+      routes, // short for `routes: routes`
+    });
+
+    var app = new Vue({
+      el: "#app",
+      //vue객체에 등록을 해야한다.
+      router,
+    });
+  </script>
+</html>
