@@ -105,6 +105,6 @@ http://localhost:8076/ecommerce/customer/swagger-ui.html
 		커스텀 이벤트 생성: emit() 이용
 
 2. 같은 레벨(형제)의 레이아웃
-이벤트 버스 이용 ( var eventBus = new Vew() );
+3. 이벤트 버스 이용 ( var eventBus = new Vew() );
 
 
