@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  </head>
+
+  <body>
+    <div id="app">
+      <div>
+        <h1>axios Application</h1>
+        <sub1></sub1>
+      </div>
+    </div>
+
+    <template id="sub1-template">
+      <div>
+        <div>박스 오피스</div>
+        <input
+          type="text"
+          placeholder="20210301"
+          v-model="date"
+          @change="getBoxOffice"
+        />
+        <table border="1">
+          <thead>
+            <tr>
+              <th>랭킹</th>
+              <th>영화명</th>
+              <th>개봉일</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(movie, idx) in list" :key="idx">
+              <td>{{movie.rank}}</td>
+              <td>{{movie.movieNm}}</td>
+              <td>{{movie.openDt}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </template>
+
+    <script>
+      const sub1 = Vue.component("sub1", {
+        template: "#sub1-template",
+        data: () => {
+          return {
+            date: "",
+            list: [],
+          };
+        },
+        methods: {
+          getBoxOffice() {
+            axios
+              .get(
+                "  http://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json",
+                {
+                  params: {
+                    key: "3d430a039fb1bae3fe5f0bc48df64e46",
+                    targetDt: this.date,
+                  },
+                }
+              )
+              .then((response) => {
+                // handle success
+                console.log(response);
+                this.list = response.data.boxOfficeResult.dailyBoxOfficeList;
+              })
+              .catch((error) => {
+                // handle error
+                console.log(error);
+              })
+              .then(() => {
+                // always executed
+              });
+          },
+        },
+      });
+
+      const app = new Vue({
+        el: "#app",
+      });
+    </script>
+  </body>
+</html>

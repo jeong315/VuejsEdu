@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <h1>Axios Application</h1>
+      <Home></Home>
+    </div>
+
+    <template id="home-template">
+      <div>
+        <h2>https://reqres.in/</h2>
+        date: <input v-model="boxoffice" /><br />
+        <button @click="date_mv">박스오피스</button><br />
+        <table border="1">
+          <thead>
+            <tr>
+              <th>랭킹</th>
+              <th>영화명</th>
+              <th>개봉일</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(boxoffice, idx) in moviesInfo" :key="idx">
+              <td>{{boxoffice.rank}}</td>
+              <td>{{boxoffice.movieNm}}</td>
+              <td>{{boxoffice.openDt}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </template>
+  </body>
+
+  <script>
+    const Home = Vue.component("home", {
+      template: `#home-template`,
+      data: () => {
+        return {
+          boxoffice: "",
+          moviesInfo: [],
+        };
+      },
+      methods: {
+        date_mv() {
+          axios
+            .get(
+              `http://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=3d430a039fb1bae3fe5f0bc48df64e46&targetDt=${this.boxoffice}`
+            )
+            .then((response) => {
+              // handle success
+              console.log(response.data);
+              this.moviesInfo = response.data.data;
+            })
+            .catch((error) => {
+              // handle error
+              console.log(error);
+            })
+            .then(() => {
+              // always executed
+            });
+        },
+      },
+    });
+
+    var app = new Vue({
+      el: "#app",
+    });
+  </script>
+</html>
+
+<!-- 
+{"rnum":"1",
+"rank":"1",
+"rankInten":"0",
+"rankOldAndNew":"OLD",
+"movieCd":"20112207",
+"movieNm":"미션임파서블:고스트프로토콜",
+"openDt":"2011-12-15",
+"salesAmt":"2776060500",
+"salesShare":"36.3",
+"salesInten":"-415699000",
+"salesChange":"-13",
+"salesAcc":"40541108500",
+"audiCnt":"353274",
+"audiInten":"-60106",
+"audiChange":"-14.5",
+"audiAcc":"5328435","scrnCnt":"697","showCnt":"3223"}, -->

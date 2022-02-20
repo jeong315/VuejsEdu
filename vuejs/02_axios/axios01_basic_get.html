@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <h1>Axios Application</h1>
+      <Home></Home>
+    </div>
+
+    <template id="home-template">
+      <div>
+        <h2>https://reqres.in//</h2>
+        <button @click="req_get">get(queryString)</button>
+        <button @click="req_get2">get2(params속성)</button>
+        <button @click="req_get3">get3()</button>
+      </div>
+    </template>
+  </body>
+
+  <script>
+    const Home = Vue.component("Home", {
+      template: `#home-template`,
+      methods: {
+        req_get() {
+          axios
+            .get("https://reqres.in/api/users?page=2") //Spring 인 경우 @RequestParam("page")
+            .then(function (response) {
+              // handle success
+              console.log(response.data.data);
+            })
+            .catch(function (error) {
+              // handle error
+              console.log(error);
+            })
+            .then(function () {
+              // always executed
+            });
+        },
+        req_get2() {
+          axios
+            .get("https://reqres.in/api/users", {
+              params: {
+                page: 2,
+              },
+            })
+            .then(function (response) {
+              console.log(response.data.data);
+            })
+            .catch(function (error) {
+              console.log(error);
+            })
+            .then(function () {
+              // always executed
+            });
+        },
+        req_get3() {
+          axios({
+            method: "get",
+            url: "https://reqres.in/api/users",
+            data: {
+              page: "2",
+            },
+          })
+            .then(function (response) {
+              console.log(response.data.data);
+            })
+            .catch(function (error) {
+              console.log(error);
+            })
+            .then(function () {
+              // always executed
+            });
+        },
+      },
+    });
+
+    var app = new Vue({
+      el: "#app",
+      data: {
+        message: "Hello Vue!",
+      },
+    });
+  </script>
+</html>

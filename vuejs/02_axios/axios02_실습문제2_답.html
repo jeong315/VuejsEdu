@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  </head>
+
+  <body>
+    <div id="app">
+      <h1>axios Application</h1>
+      <h3>https://reqres.in/</h3>
+      <sub1></sub1>
+    </div>
+
+    <template id="sub1-template">
+      <div>
+        id:<input v-model="id" /><br />
+        <button @click="list_users">list_users 요청</button>
+        <table border="1">
+          <thead>
+            <tr>
+              <th>id</th>
+              <th>email</th>
+              <th>first_name</th>
+              <th>last_name</th>
+              <th>avatar</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(user, idx) in usersInfo" :key="idx">
+              <td>{{user.id}}</td>
+              <td>{{user.email}}</td>
+              <td>{{user.first_name}}</td>
+              <td>{{user.last_name}}</td>
+              <td><img :src="user.avatar" width="50" height="50" /></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </template>
+
+    <script>
+      const sub1 = Vue.component("sub1", {
+        template: "#sub1-template",
+        data: () => {
+          return {
+            id: "",
+            usersInfo: [],
+          };
+        },
+        methods: {
+          list_users() {
+            axios
+              .get(`https://reqres.in/api/users?page=${this.id}`)
+              .then((response) => {
+                // handle success
+                console.log(response.data);
+                this.usersInfo = response.data.data;
+              })
+              .catch((error) => {
+                // handle error
+                console.log(error);
+              })
+              .then(() => {
+                // always executed
+              });
+          },
+        },
+      });
+
+      const app = new Vue({
+        el: "#app",
+      });
+    </script>
+  </body>
+</html>
