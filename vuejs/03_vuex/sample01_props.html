@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <div>
+        <child-component username="hong길dong" age="18" :addr="address"></child>
+      </div>
+    </div>
+
+  <script>
+    //자식
+    const child = Vue.component("child-component", {
+      template: `<div>child Component, {{username}}, {{age}} , {{addr}}</div>`,
+      props:['username', 'age', 'addr'],
+    });
+
+    //부모
+    var app = new Vue({
+      el: "#app",
+      data: {
+        address: "서울",
+      },
+    });
+  </script>
+</html>

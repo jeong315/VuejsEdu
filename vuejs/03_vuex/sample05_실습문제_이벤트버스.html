@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <div>
+        <input-component></input-component>
+        <hr/>
+        <list-component></list-component>
+      </div>
+    </div>
+
+    <template id="input-template">      
+      <div>
+        <h1>Vuex Application - eventBus</h1><hr/>
+        이름 : <input @keyup.enter="user_add" type="text" v-model="username" placeholder="이름을 입력하세요"/>
+        <!-- keyup.enter : 키입력 후 엔터치면 데이터 입력 -->
+      </div>
+    </template>
+
+    <template id="list-template">
+      <div>
+        <ul v-for="(user,idx) in userList">
+          <li>{{idx}} : {{user}} <button @click="user_del(idx)">삭제</button></li>
+        </ul>
+      </div>
+    </template>
+
+  <script>
+    var eventBus = new Vue();
+
+    const inputName = Vue.component("input-component", {
+      template: `#input-template`,
+      data:function(){
+        return{
+          username:"",
+        }
+      },
+      methods:{
+        user_add(){
+          console.log("2.input-template의 @key-enter=user_add함수 인식");
+          eventBus.$emit("xyz",this.username);
+        }
+      },
+    });
+    const listName = Vue.component("list-component", {
+      template: `#list-template`,
+      data:function(){
+        return{
+          userList: [],
+        }
+      },
+      created(){
+        eventBus.$on('xyz',this.user_add);
+        console.log("1번.created 로 제일 빨리 출력 input의 xyz함수를 list에서 인식");
+      },
+      methods:{
+        user_add(name){
+          console.log("3.list에서 name을 받아 userList에 넣는다. name: "+name);
+          this.userList.push(name);
+        },
+        user_del(idx){
+          console.log(idx+"번 idx 삭제 요청");
+          //배열.splice(시작위치, 삭제개수, [값추가, 값추가]) ;
+          this.userList.splice(idx,1);
+        },
+      },
+    });
+
+    var app = new Vue({
+      el: "#app",
+    });
+  </script>
+</html>

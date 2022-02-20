@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuex/dist/vuex.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <div>
+        <child-component></child-component>
+        <child2-component></child2-component>
+      </div>
+    </div>
+    <template id="child-template">
+      <div>
+        <h1>child 컴포넌트</h1>
+        이름:<input @keyup.enter="send" v-model="myname" />
+      </div>
+    </template>
+    <template id="child2-template">
+      <div>
+        <h1>child2 컴포넌트</h1>
+        store데이터:{{$store.state.username}},{{kkk.username}}<br />
+      </div>
+    </template>
+    <script>
+      /////////////////////////////////////
+      const store = new Vuex.Store({
+        state: {
+          username: "",
+        },
+        mutations: {
+          mutataion_trans(state, payload) {
+            console.log("mutataion_trans", state, payload);
+            state.username = payload.myname;
+          },
+        },
+      });
+      /////////////////////////////////////
+      const child2 = Vue.component("child2-component", {
+        template: `#child2-template`,
+        data: () => {
+          console.log(">>>>", store.state);
+          return {
+            kkk: store.state,
+          };
+        },
+      });
+      const child = Vue.component("child-component", {
+        template: `#child-template`,
+        data: function () {
+          return {
+            myname: "",
+          };
+        },
+        methods: {
+          send() {
+            // store의 mutataion_trans 메서드 호출
+            store.commit("mutataion_trans", { myname: this.myname }); //전달데이터인 payload는 json형식으로
+          },
+        },
+      });
+
+      var app = new Vue({
+        el: "#app",
+        store,
+      });
+    </script>
+  </body>
+</html>

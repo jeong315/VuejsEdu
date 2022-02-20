@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuex/dist/vuex.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <div>
+        <child-component></child-component>
+        <child2-component></child2-component>
+      </div>
+    </div>
+
+    <template id="child-template">
+      <div>
+        <h1>child Component</h1>
+        이름: <input @keyup.enter="send" v-model="myName"/>
+      </div>
+    </template>
+
+    <template id="child2-template">
+      <div>
+        <h1>child2 Component</h1>
+        store 데이터 직접 써보기 : {{$store.state.username }}<br/>
+        store 데이터 저장해서 쓰기: {{kkk.username}}<br/>
+      </div>
+    </template>
+
+  <script>
+    //공유 저장소
+    const store = new Vuex.Store({
+      state: {//저장소
+        username: "",
+      },
+      mutations: {//메소드 , 뮤테이션을 이용하여 state값 변경 , (state,전달받은 데이터)
+        mutation_trans (state,payload) {
+          // console.log(state);
+          state.username = payload.myName;
+        }
+      },
+      actions:{
+        //비동기 처리 메서드, mutations 메서드 호출
+        actions_trans(context, payload){
+          setInterval(()=>{store.commit('mutation_trans',{myName:payload.name})},2000);
+          console.log("context : ", context);
+          // store.commit('mutation_trans',{myName:payload.name});
+        },
+      },
+    })
+//---------------------------------------------------//
+    const child = Vue.component("child-component", {
+      template: `#child-template`,
+      data:function(){
+        return{
+          myName:"",
+        };
+      },
+      methods:{
+        send(){
+          store.dispatch('actions_trans',{name: this.myName});
+        },
+      },
+    });
+    const child2 = Vue.component("child2-component", {
+      template: `#child2-template`,
+      data:()=>{
+        // console.log("store.state" + store.state );
+        return{
+          kkk: store.state,
+        }
+      },
+    });
+
+    
+    var app = new Vue({
+      el: "#app",
+      store,
+    });
+  </script>
+</html>

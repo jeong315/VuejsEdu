@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <div>
+        <!-- 부모에게 전달할 이벤트를 지정 v-on:xyz"부모에서 처리할 함수"-->
+        <child-component v-on:xyz="receive"></child-component>
+      </div>
+    </div>
+
+    <template id="child-template">
+      <div>
+        <h1>child Component</h1>
+        <button @click="send">부모에게 요청</button>
+      </div>
+    </template>
+
+  <script>
+    //자식
+    const child = Vue.component("child-component", {
+      template: `#child-template`,
+      methods:{
+        send(){
+          //부모에게 사용자 이벤트 전달
+          // this.$emit('사용자이벤트', 전달값1, 전달값2);
+          this.$emit('xyz');
+        },
+      },
+    });
+
+    //부모
+    var app = new Vue({
+      el: "#app",
+      methods:{
+        receive(){
+          console.log("receive");
+        },
+      },
+    });
+  </script>
+</html>

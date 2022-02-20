@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <div>
+        <!--형제 관계-->
+        <child-component></child-component>
+        <child2-component></child2-component>
+      </div>
+    </div>
+
+    <template id="child-template">
+      <div>
+        <h1>child Component</h1>
+        <button @click="send">child2로 요청</button>
+      </div>
+    </template>
+
+    <template id="child2-template">
+      <div>
+        <h1>child2 Component</h1>
+      </div>
+    </template>
+
+  <script>
+    var eventBus = new Vue();
+
+    const child = Vue.component("child-component", {
+      template: `#child-template`,
+      methods:{
+        send(){
+          eventBus.$emit('xyz','홍길동');
+        },
+      },
+    });
+    const child2 = Vue.component("child2-component", {
+      template: `#child2-template`,
+      created(){
+        //xyz 이벤트를 캐치
+        //eventBus.$on('사용자이벤트','수행할함수');
+        eventBus.$on('xyz',this.receive);
+      },
+      methods:{
+        receive(name){
+          console.log("받나", name);
+        },
+      },
+    });
+
+    var app = new Vue({
+      el: "#app",
+    });
+  </script>
+</html>

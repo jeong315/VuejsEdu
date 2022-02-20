@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuex/dist/vuex.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <div>
+        <input-component></input-component>
+        <hr/>
+        <list-component></list-component>
+      </div>
+    </div>
+
+    <template id="input-template">      
+      <div>
+        <h1>Vuex Application - eventBus</h1><hr/>
+        이름 : <input type="text" @keyup.enter="send" v-model="enterName"/>
+      </div>
+    </template>
+
+    <template id="list-template">
+      <div>
+        <ul v-for="(user, idx) in kkk.userName">
+          <li>{{idx}} : {{user}} <button @click="user_del(idx)">삭제</button></li>
+        </ul>
+      </div>
+    </template>
+
+  <script>
+    const store = new Vuex.Store({
+      state: {
+        userName: [],
+      },
+      mutations: {
+        mutation_trans(state,payload){
+          state.userName.push(payload.enterName);
+        },
+        mutation_del(state,payload){
+          this.state.userName.splice(payload,1);
+        }
+      }
+    });
+
+    const inputName = Vue.component("input-component", {
+      template: `#input-template`,
+      data:function(){
+        return{
+          enterName:"",
+        }
+      },
+      methods:{
+        send(){
+          store.commit('mutation_trans',{enterName:this.enterName});
+          this.enterName='';
+        },
+      },
+    });
+    const listName = Vue.component("list-component", {
+      template: `#list-template`,
+      data:()=>{
+        return{
+          kkk: store.state,
+        }
+      },
+      methods:{
+        user_del(idx){
+          store.commit('mutation_del',idx);
+        }
+      }
+    });
+
+    var app = new Vue({
+      el: "#app",
+      store,
+    });
+  </script>
+</html>

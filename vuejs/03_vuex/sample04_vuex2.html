@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuex/dist/vuex.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <div>
+        <child-component></child-component>
+        <child2-component></child2-component>
+      </div>
+    </div>
+
+    <template id="child-template">
+      <div>
+        <h1>child Component</h1>
+        이름: <input @keyup.enter="send" v-model="myName"/>
+      </div>
+    </template>
+
+    <template id="child2-template">
+      <div>
+        <h1>child2 Component</h1>
+        store 데이터 직접 써보기 : {{$store.state.username }}<br/>
+        store 데이터 저장해서 쓰기: {{kkk.username}}<br/>
+      </div>
+    </template>
+
+  <script>
+    //공유 저장소
+    const store = new Vuex.Store({
+      state: {//저장소
+        username: "",
+      },
+      mutations: {//메소드 , 뮤테이션을 이용하여 state값 변경 , (state,전달받은 데이터)
+        mutation_trans (state,payload) {
+          console.log('mutation_trans 호출' , 'state : ' , state , ' / payload : ' , payload);
+          state.username = payload.myName;
+        }
+      }
+    })
+    //commit을 호출하면 mutations 어쩌고..
+//---------------------------------------------------//
+    const child = Vue.component("child-component", {
+      template: `#child-template`,
+      data:function(){
+        return{
+          myName:"",
+        };
+      },
+      methods:{
+        send(){
+          //store의 mutation_trans 얘를 commit으로 호출해준다.
+          store.commit('mutation_trans',{myName:this.myName}); //전달데이터인 payload는 json형식으로 넘겨줘야 한다.
+        },
+      },
+    });
+    const child2 = Vue.component("child2-component", {
+      template: `#child2-template`,
+      data:()=>{
+        console.log("store.stateㅂㅂㅂ " + store.state );
+        return{
+          kkk: store.state,
+        }
+      },
+    });
+
+    
+    var app = new Vue({
+      el: "#app",
+      store,
+    });
+  </script>
+</html>
