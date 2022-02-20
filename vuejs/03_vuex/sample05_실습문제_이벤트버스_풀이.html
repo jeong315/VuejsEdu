@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuex/dist/vuex.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <div>
+        <input-component></input-component>
+        <hr />
+        <list-component></list-component>
+      </div>
+    </div>
+    <template id="input-template">
+      <div>이름:<input @keyup.enter="user_add" v-model="username" /></div>
+    </template>
+    <template id="list-template">
+      <div>
+        <ul v-for="(user,idx) in userList">
+          <li>{{idx}}:{{user}}<button @click="user_del(idx)">삭제</button></li>
+        </ul>
+      </div>
+    </template>
+    <script>
+      const eventBus = new Vue();
+      const input = Vue.component("input-component", {
+        template: `#input-template`,
+        data: function () {
+          return {
+            username: "",
+          };
+        },
+        methods: {
+          user_add() {
+            eventBus.$emit("xyz", this.username);
+          },
+        },
+      });
+      const list = Vue.component("list-component", {
+        template: `#list-template`,
+        data: function () {
+          return {
+            userList: [],
+          };
+        },
+        created() {
+          eventBus.$on("xyz", this.user_add);
+        },
+        methods: {
+          user_add(name) {
+            this.userList.push(name);
+          },
+          user_del(idx) {
+            // 배열.splice(시작위치,삭제할갯수[,값추가,값추가]);
+            this.userList.splice(idx, 1);
+          },
+        },
+      });
+
+      var app = new Vue({
+        el: "#app",
+      });
+    </script>
+  </body>
+</html>
